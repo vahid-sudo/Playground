@@ -1,0 +1,15 @@
+# How the factory checks this repo. It reads this file only from main on GitHub.
+#
+# The repo is plain HTML and CSS with no package.json, so each check fetches a
+# pinned validator with npx instead of using npm scripts.
+checks:
+  - name: html
+    # index.html must be valid HTML. The "standard" preset checks the HTML
+    # standard only, not code style.
+    run: npx --yes html-validate@11.18.0 --preset standard index.html
+  - name: css
+    # styles.css must parse with no errors. It doesn't exist until the second
+    # ticket, so the check passes when the file is missing.
+    run: "[ ! -f styles.css ] || npx --yes csstree-validator@4.0.1 styles.css"
+base_branch: main             # the final pull request goes here
+protected_branches: [main]    # agents never commit, push or merge here
